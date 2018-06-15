@@ -9,7 +9,8 @@ export class ProductsService {
       category: 'technology',
       brand: 'apple',
       quantity: '15',
-      image: 'https://www.vueloiv.com/wp-content/uploads/new-apple-macbook-pro.png'
+      image:
+        'https://www.vueloiv.com/wp-content/uploads/new-apple-macbook-pro.png'
     },
 
     {
@@ -24,12 +25,39 @@ export class ProductsService {
   ];
 
   constructor() {}
-  getProducts(): Product [] {
+  getProducts(): Product[] {
     return this.products;
   }
+  getProduct(idx: string): Product {
+    return this.products[idx];
+  }
+  searchByCharacter(query: string): Product[] {
+    const searching = query.toLowerCase();
+    let productsArray: Product[] = [];
+    productsArray = this.products.filter((product, index) => {
+      product.index = index;
+      return product.name.toLowerCase().indexOf(searching) >= 0;
+    });
+    return productsArray;
+  }
+  searchByCategory(category: string): Product[] {
+    let productsArray: Product[] = [];
+    productsArray = this.products.filter((product, index) => {
+      product.index = index;
+      return product.category === category;
+    });
+    return productsArray;
+  }
+  searchByPrice(min: number, max: number): Product[] {
+    let productsArray: Product[] = [];
+    productsArray = this.products.filter((product, index) => {
+      product.index = index;
+      const currencyValue = Number(product.price);
+      return (currencyValue >= min && currencyValue <= max);
+    });
+    return productsArray;
+  }
 }
-
-
 
 export interface Product {
   name: string;
@@ -38,4 +66,5 @@ export interface Product {
   brand: string;
   quantity: string;
   image?: string;
+  index?: number;
 }
